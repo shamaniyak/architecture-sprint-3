@@ -1,0 +1,73 @@
+@startuml
+!include <C4/C4_Container>
+!include <C4/C4_Component>
+
+Container_Boundary(AuthServiceBoundary, "Authentication Service") {
+    Component(authController, "Auth Controller", "Controller", "Обрабатывает HTTP-запросы для аутентификации")
+    Component(authService, "Authentication Service", "OAuth2", "Проверка подлинности пользователей")
+    Rel(authController, authService, "Вызывает API")
+}
+
+Rel(authService, UserManagmentServiceBoundary, "Запрашивает данные пользователей", "HTTP")
+
+Container_Boundary(UserManagmentServiceBoundary, "User Managment Service") {
+    Component(userController, "User Controller", "Controller", "Обрабатывает HTTP-запросы для управления профилями пользователей")
+    Component(userService, "User Managment Service", "Java", "Сервис управления пользователями")
+    Component(userRepo, "User Repository", "Repository", "Читает/пишет данные пользователей в БД")
+    ComponentDb(userDb, "User DB", "MongoDB", "Хранение данных пользователей")
+    Rel(userController, userService, "Вызывает API")
+    Rel(userService, userRepo, "Читает/записывает профили пользователей")
+    Rel(userRepo, userDb, "Чтение/запись данных пользователей")
+}
+
+Container_Boundary(DeviceServiceBoundary, "Device Service") {
+    Component(deviceController, "Device Controller", "Controller", "Обрабатывает HTTP-запросы для управления устройствами")
+    Component(deviceService, "Device Service", "Java", "Управление устройствами и интеграция с партнёрами")
+    Component(deviceRepo, "Device Repository", "Repository", "Читает/пишет данные устройств в БД")
+    ComponentDb(deviceDb, "Device Database", "MongoDB", "Данные об устройствах")
+    Rel(deviceController, deviceService, "Вызывает API")
+    Rel(deviceService, deviceRepo, "Читает/записывает данные устройств")
+    Rel(deviceRepo, deviceDb, "Чтение/запись данных")
+}
+
+Container_Boundary(HeatingServiceBoundary, "Heating Service") {
+    Component(heatingController, "Heating Controller", "Controller", "Обрабатывает HTTP-запросы для управления отоплением")
+    Component(heatingService, "Heating Service Logic", "Java", "Управление отоплением")
+    Component(heatingRepo, "Heating Repository", "Repository", "Читает/пишет данные об отоплении в БД")
+    ComponentDb(heatingDb, "Heating Database", "PostgreSQL", "Данные об отопительных системах")
+    Rel(heatingController, heatingService, "Вызывает API")
+    Rel(heatingService, heatingRepo, "Читает/записывает данные об отоплении")
+    Rel(heatingRepo, heatingDb, "Чтение/запись данных")
+}
+
+Container_Boundary(LightingServiceBoundary, "Lighting Service") {
+    Component(lightingController, "Lighting Controller", "Controller", "Обрабатывает HTTP-запросы для управления освещением")
+    Component(lightingService, "Lighting Service", "Java", "Управление освещением")
+    Component(lightingRepo, "Lighting Repository", "Repository", "Читает/пишет данные об освещении в БД")
+    ComponentDb(lightingDb, "Lighting Database", "PostgreSQL", "Данные об освещении")
+    Rel(lightingController, lightingService, "Вызывает API")
+    Rel(lightingService, lightingRepo, "Читает/записывает данные об освещении")
+    Rel(lightingRepo, lightingDb, "Чтение/запись данных")
+}
+
+Container_Boundary(GateServiceBoundary, "Gate Service") {
+    Component(gateController, "Gate Controller", "Controller", "Обрабатывает HTTP-запросы для управления воротами")
+    Component(gateService, "Gate Service", "Java", "Управление воротами")
+    Component(gateRepo, "Gate Repository", "Repository", "Читает/пишет данные о состоянии ворот в БД")
+    ComponentDb(gateDb, "Gate Database", "PostgreSQL", "Данные о состоянии ворот")
+    Rel(gateController, gateService, "Вызывает API")
+    Rel(gateService, gateRepo, "Читает/записывает данные о воротах")
+    Rel(gateRepo, gateDb, "Чтение/запись данных")
+}
+
+Container_Boundary(MonitoringServiceBoundary, "Monitoring Service") {
+    Component(monitoringController, "Monitoring Controller", "Controller", "Обрабатывает HTTP-запросы для получения состояния датчиков")
+    Component(monitoringService, "Monitoring Service", "Java", "Сбор и анализ состояния датчиков")
+    Component(monitoringRepo, "Monitoring Repository", "Repository", "Читает/пишет состояние датчиков в БД")
+    ComponentDb(monitoringDb, "Monitoring Database", "PostgreSQL", "Хранит данные о состоянии датчиков")
+    Rel(monitoringController, monitoringService, "Вызывает API")
+    Rel(monitoringService, monitoringRepo, "Читает/записывает данные состояния датчиков")
+    Rel(monitoringRepo, monitoringDb, "Чтение/запись данных")
+}
+
+@enduml
