@@ -1,0 +1,25 @@
+@startuml
+!include <C4/C4_Context>
+
+Person(user, "Пользователь", "Управляет системой умного дома через веб-браузер или мобильное приложение")
+
+System_Boundary(SmartHomeBoundary, "Система умного дома") {
+    System(apiGateway, "API Gateway", "Обрабатывает все запросы от клиентских приложение")
+    System(authService, "Authentication Service", "Проверка подлинности пользователей")
+    System(userService, "User Managment Service", "Сервис управления пользователями")
+    System(deviceService, "Device Service", "Управление устройствами и интеграция с партнёрами")
+    System(heatingService, "Heating Service", "Управление отоплением")
+    System(lightingService, "Lighting Service", "Управление освещением")
+    System(gateService, "Gate Service", "Управление воротами")
+    System(monitoringService, "Monitoring Service", "Сбор и анализ состояния датчиков")
+}
+
+Rel(user, apiGateway, "HTTP-запросы")
+Rel(apiGateway, authService, "Запросы на аутентификацию")
+Rel(apiGateway, userService, "Запросы на управление пользователями")
+Rel(apiGateway, deviceService, "Запросы на управление устройствами")
+Rel(apiGateway, heatingService, "Запросы на управление отоплением")
+Rel(apiGateway, lightingService, "Запросы на управление освещением")
+Rel(apiGateway, gateService, "Запросы на управление воротами")
+Rel(apiGateway, monitoringService, "Запрос данных о состоянии датчиков")
+@enduml
