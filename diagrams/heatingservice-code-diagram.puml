@@ -1,0 +1,38 @@
+@startuml
+
+title Диаграмма классов для сервиса управления отоплением
+
+class HeatingService {
+    +getHeatingSystem(Long id): HeatingDto
+    +updateHeatingSystem(Long id, HeatingDto heatingDto): HeatingDto
+    +turnOn(Long id)
+    +turnOff(Long id)
+    +setTargetTemperature(Long id, double temperature);
+    +getCurrentTemperature(Long id): double
+}
+
+class HeatingDto {
+    -id: int
+    -name: string
+    -type: string
+    -mac: string
+}
+
+class HeatingSystem {
+    -id: Long
+    -isOn: boolean
+    -targetTemperature: double
+    -currentTemperature: double
+}
+
+class HeatingSystemRepository {
+    +findById(Long id): HeatingSystem
+    +save(HeatingSystem heatingSystem)
+}
+
+HeatingService --> HeatingDto : "использует/выдает"
+HeatingService ..> HeatingSystem : "использует"
+HeatingService *-> HeatingSystemRepository : "создает/использует"
+HeatingSystemRepository --> HeatingSystem : "использует"
+
+@enduml

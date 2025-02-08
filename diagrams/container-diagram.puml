@@ -1,0 +1,64 @@
+@startuml
+!include <C4/C4_Container>
+!include <C4/C4_Component>
+
+Person(user, "Пользователь", "Управляет системой умного дома через веб-браузер или мобильное приложение")
+
+Boundary(ApiGatewayBoundary, "") {
+    Component(apiGateway, "API Gateway", "Java, REST API", "Обрабатывает все запросы от клиентских приложение")
+}
+
+Container_Boundary(AuthServiceBoundary, "Authentication Service", "Проверка подлинности пользователей") {
+    Component(authService, "Authentication Service", "OAuth2", "Проверка подлинности пользователей")
+}
+
+Container_Boundary(UserManagmentServiceBoundary, "User Managment Service") {
+    Component(userService, "User Managment Service", "Java", "Сервис управления пользователями")
+    ComponentDb(userDb, "User DB", "MongoDB", "Хранение данных пользователей")
+    Rel(userService, userDb, "Чтение/запись данных пользователей")
+}
+
+Container_Boundary(DeviceServiceBoundary, "Device Service") {
+    Component(deviceService, "Device Service", "Java", "Управление устройствами и интеграция с партнёрами")
+    ComponentDb(deviceDb, "Device Database", "MongoDB", "Данные об устройствах")
+    Rel(deviceService, deviceDb, "Чтение/запись данных об устройствах")
+}
+
+Container_Boundary(HeatingServiceBoundary, "Heating Service") {
+    Component(heatingService, "Heating Service", "Java", "Управление отоплением")
+    ComponentDb(heatingDb, "Heating Database", "PostgreSQL", "Данные об отопительных системах")
+    Rel(heatingService, heatingDb, "Чтение/запись данных об отопительных системах")
+}
+
+Container_Boundary(LightingServiceBoundary, "Lighting Service") {
+    Component(lightingService, "Lighting Service", "Java", "Управление освещением")
+    ComponentDb(lightingDb, "Lighting Database", "PostgreSQL", "Данные об освещении")
+    Rel(lightingService, lightingDb, "Чтение/запись данных об освещении")
+}
+
+Container_Boundary(GateServiceBoundary, "Gate Service") {
+    Component(gateService, "Gate Service", "Java", "Управление воротами")
+    ComponentDb(gateDb, "Gate Database", "PostgreSQL", "Данные о состоянии ворот")
+    Rel(gateService, gateDb, "Чтение/запись данных о состоянии ворот")
+}
+
+Container_Boundary(MonitoringServiceBoundary, "Monitoring Service") {
+    Component(monitoringService, "Monitoring Service", "Java", "Сбор и анализ состояния датчиков")
+    ComponentDb(monitoringDb, "Monitoring Database", "PostgreSQL", "Хранит данные о состоянии датчиков")
+    Rel(monitoringService, monitoringDb, "Сохранение данных о состоянии датчиков")
+}
+
+System_Ext(sensors, "Датчики", "Предоставляют данные о своем состоянии")
+
+Rel(user, apiGateway, "Отправляет запросы на управление умным домом")
+Rel(apiGateway, authService, "Запросы на аутентификацию", "REST API")
+Rel(apiGateway, userService, "Запросы на управление пользователями", "REST API")
+Rel(authService, userService, "Запросы данных пользователей", "REST API")
+Rel(apiGateway, deviceService, "Запросы на управление устройствами", "REST API")
+Rel(apiGateway, heatingService, "Запросы на управление отоплением", "REST API")
+Rel(apiGateway, lightingService, "Запросы на управление освещением", "REST API")
+Rel(apiGateway, gateService, "Запросы на управление воротами", "REST API")
+Rel(apiGateway, monitoringService, "Запрос данных о состоянии датчиков", "REST API")
+Rel(deviceService, sensors, "Управляет датчиками", "HTTP/REST")
+Rel(monitoringService, sensors, "Отслеживает состояние датчиков", "HTTP/REST")
+@enduml
