@@ -59,12 +59,12 @@
 
 **Диаграмма компонентов (Components)**
 
-[Диаграмма контейнеров](diagrams/component-diagram.puml)
+[Диаграмма компонентов](diagrams/component-diagram.puml)
 
 **Диаграмма кода (Code)**
 
-[Диаграмма контейнеров](diagrams/heatingservice-code-diagram.puml)
+[Диаграмма кода](diagrams/heatingservice-code-diagram.puml)
 
 # Задание 3. Разработка ER-диаграммы
 
-Добавьте сюда ER-диаграмму. Она должна отражать ключевые сущности системы, их атрибуты и тип связей между ними.
+[ER-диаграмма](diagrams/er-diagram.puml)
